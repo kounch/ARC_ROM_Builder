@@ -1,0 +1,218 @@
+    {
+        "arcadeataritetris": {
+            "default_arc": "",
+            "default_mra": ""
+        },
+        "jt1942": {
+            "default_arc": "",
+            "default_mra": ""
+        },
+        "jt1943": {
+            "default_arc": "jt1943",
+            "default_mra": "1943 The Battle of Midway (Euro)"
+        },
+        "jtbiocom": {
+            "default_arc": "",
+            "default_mra": ""
+        },
+        "jtbtiger": {
+            "default_arc": "",
+            "default_mra": ""
+        },
+        "jtbubl": {
+            "default_arc": "jtbubl",
+            "default_mra": "Bubble Bobble"
+        },
+        "jtcastle": {
+            "default_arc": "",
+            "default_mra": ""
+        },
+        "jtcommnd": {
+            "default_arc": "",
+            "default_mra": ""
+        },
+        "jtcomsc": {
+            "default_arc": "",
+            "default_mra": ""
+        },
+        "jtcontra": {
+            "default_arc": "",
+            "default_mra": ""
+        },
+        "jtcop": {
+            "default_arc": "jtcop",
+            "default_mra": "Robocop"
+        },
+        "jtcps1": {
+            "default_arc": "",
+            "default_mra": ""
+        },
+        "jtcps2": {
+            "default_arc": "",
+            "default_mra": ""
+        },
+        "jtcps15": {
+            "default_arc": "",
+            "default_mra": ""
+        },
+        "jtdd": {
+            "default_arc": "",
+            "default_mra": ""
+        },
+        "jtdd2": {
+            "default_arc": "",
+            "default_mra": ""
+        },
+        "jtexed": {
+            "default_arc": "",
+            "default_mra": ""
+        },
+        "jtf1drm": {
+            "default_arc": "",
+            "default_mra": ""
+        },
+        "jtflane": {
+            "default_arc": "",
+            "default_mra": ""
+        },
+        "jtgng": {
+            "default_arc": "",
+            "default_mra": ""
+        },
+        "jtgunsmk": {
+            "default_arc": "",
+            "default_mra": ""
+        },
+        "jthige": {
+            "default_arc": "",
+            "default_mra": ""
+        },
+        "jtkarnov": {
+            "default_arc": "jtkarnov",
+            "default_mra": "Karnov"
+        },
+        "jtkchamp": {
+            "default_arc": "",
+            "default_mra": ""
+        },
+        "jtkicker": {
+            "default_arc": "",
+            "default_mra": ""
+        },
+        "jtkiwi": {
+            "default_arc": "",
+            "default_mra": ""
+        },
+        "jtkunio": {
+            "default_arc": "",
+            "default_mra": ""
+        },
+        "jtlabrun": {
+            "default_arc": "",
+            "default_mra": ""
+        },
+        "jtmidres": {
+            "default_arc": "",
+            "default_mra": ""
+        },
+        "jtmikie": {
+            "default_arc": "",
+            "default_mra": ""
+        },
+        "jtmx5k": {
+            "default_arc": "",
+            "default_mra": ""
+        },
+        "jtninja": {
+            "default_arc": "jtninja",
+            "default_mra": "Bad Dudes"
+        },
+        "jtoutrun": {
+            "default_arc": "jtoutrun",
+            "default_mra": "Out Run"
+        },
+        "jtpang": {
+            "default_arc": "jtpang",
+            "default_mra": "Pang"
+        },
+        "jtpinpon": {
+            "default_arc": "",
+            "default_mra": ""
+        },
+        "jtrastan": {
+            "default_arc": "",
+            "default_mra": ""
+        },
+        "jtroadf": {
+            "default_arc": "jtroadf",
+            "default_mra": "Road Fighter"
+        },
+        "jtroc": {
+            "default_arc": "",
+            "default_mra": ""
+        },
+        "jtrumble": {
+            "default_arc": "",
+            "default_mra": ""
+        },
+        "jts16": {
+            "default_arc": "",
+            "default_mra": ""
+        },
+        "jts16b": {
+            "default_arc": "",
+            "default_mra": ""
+        },
+        "jtsarms": {
+            "default_arc": "",
+            "default_mra": ""
+        },
+        "jtsbask1": {
+            "default_arc": "",
+            "default_mra": ""
+        },
+        "jtsbaskt": {
+            "default_arc": "",
+            "default_mra": ""
+        },
+        "jtsectnz": {
+            "default_arc": "jtsectnz",
+            "default_mra": "Section Z"
+        },
+        "jtsf": {
+            "default_arc": "",
+            "default_mra": ""
+        },
+        "jtshanon": {
+            "default_arc": "",
+            "default_mra": ""
+        },
+        "jtslyspy": {
+            "default_arc": "jtslyspy",
+            "default_mra": "Boulder Dash"
+        },
+        "jttora": {
+            "default_arc": "",
+            "default_mra": ""
+        },
+        "jttrack": {
+            "default_arc": "",
+            "default_mra": ""
+        },
+        "jttrojan": {
+            "default_arc": "",
+            "default_mra": ""
+        },
+        "jtvigil": {
+            "default_arc": "",
+            "default_mra": ""
+        },
+        "jtvulgus": {
+            "default_arc": "",
+            "default_mra": ""
+        },
+        "jtyiear": {
+            "default_arc": "",
+            "default_mra": ""
+        }
+    }
