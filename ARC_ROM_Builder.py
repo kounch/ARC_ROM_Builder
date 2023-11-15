@@ -310,16 +310,16 @@ def chk_zip_cache(d_arcade_db: dict[str, Any], d_cores_db: dict[str, Any],
     d_tags: dict[str, Any] = d_arcade_db['tag_dictionary']
 
     for s_file in d_files:
-        str_name: str = s_file.split('/')[-1]
+        s_name: str = s_file.split('/')[-1]
         for i_item in d_files[s_file]['tags']:
             for j_item in d_tags:
                 if d_tags[j_item] == i_item and j_item in d_cores_db:
-                    b_ok = chk_or_download(s_roms_path, str_name,
+                    b_ok = chk_or_download(s_roms_path, s_name,
                                            d_files[s_file]['hash'],
                                            d_files[s_file]['size'],
                                            d_files[s_file]['url'], b_force)
                     if not b_ok:
-                        print(f'{str_name} Bad file!')
+                        print(f'{s_name} Bad file!')
 
 
 def chk_mra_cache(d_mra_db: dict[str, Any], d_cores_db: dict[str, Any],
@@ -391,7 +391,7 @@ def build_arc_files(d_mras: dict[str, Any], d_cores_db: dict[str, Any],
                 s_arc_path: str = s_out_path
                 if s_subdir_arc == '' or (default_mra != '' and
                                           s_submra.startswith(default_mra)):
-                    s_arc_name: str = (''.join(s_mra.split('arcade')) + '.arc')
+                    s_arc_name: str = ''.join(s_mra.split('arcade')) + '.arc'
                     if d_cores_db[s_basename_arc]['default_arc'] != '':
                         s_arc_name = d_cores_db[s_basename_arc][
                             'default_arc'] + '.arc'
@@ -579,14 +579,14 @@ def chk_or_download(s_path: str,
     return b_ok
 
 
-def get_file_hash(str_in_file: str) -> str:
+def get_file_hash(s_file: str) -> str:
     """
     Get file md5 hash
-    :param str_in_file: Path to file
+    :param s_file: Path to file
     :return: String with hash data
     """
     md5_hash: object = hashlib.md5()
-    with open(str_in_file, "rb") as f_data:
+    with open(s_file, "rb") as f_data:
         # Read and update hash string value in blocks of 4K
         for byte_block in iter(lambda: f_data.read(4096), b""):
             md5_hash.update(byte_block)
