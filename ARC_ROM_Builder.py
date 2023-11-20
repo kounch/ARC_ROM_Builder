@@ -61,12 +61,14 @@ def main():
     s_out_path: str = arg_data['output_dir']
 
     d_arcade_db: dict[str, Any] = load_arcade_bd(s_cache_path,
-                                                 arg_data['force_bda'])
+                                                 arg_data['force_bda'],
+                                                 arg_data['arcadebd_commit'])
     if not d_arcade_db:
         LOGGER.error("There's no Arcade JSON data")
         sys.exit(2)
 
-    d_mra_db: dict[str, Any] = load_mra_bd(s_cache_path, arg_data['force_bdm'])
+    d_mra_db: dict[str, Any] = load_mra_bd(s_cache_path, arg_data['force_bdm'],
+                                           arg_data['mrabd_commit'])
     if not d_mra_db:
         LOGGER.error("There's no MRA JSON data")
         sys.exit(2)
@@ -83,7 +85,8 @@ def main():
 
     print('Checking MRA files cache...')
     d_mras: dict[str, Any] = chk_mra_cache(d_mra_db, d_cores_db, s_mras_path,
-                                           arg_data['force'])
+                                           arg_data['force'],
+                                           arg_data['mras_commit'])
 
     if arg_data['build_arc_rom']:
         print('Building ARC files...')
@@ -108,6 +111,9 @@ def parse_args() -> dict[str, Any]:
     values['exclude'] = []
     values['build_arc_rom'] = True
     values['force'] = False
+    values['arcadebd_commit'] = 'db'
+    values['mrabd_commit'] = '5d57a0a6d9e17e68c281953c6e02cc49805251a5'
+    values['mras_commit'] = '71dae38d45b3646f35345848a87cc4a709b6b6af'
 
     parser = argparse.ArgumentParser(
         description='ARC and ROM Builder',
@@ -165,6 +171,21 @@ def parse_args() -> dict[str, Any]:
                         action='store_true',
                         dest='no_build_arc_rom',
                         help='Do not build ARC and ROM files')
+    parser.add_argument('--arcadebd_commit',
+                        required=False,
+                        action='store',
+                        dest='arcadebd_commit',
+                        help='Arcade BD Commit ID')
+    parser.add_argument('--mrabd_commit',
+                        required=False,
+                        action='store',
+                        dest='mrabd_commit',
+                        help='MRA BD Commit ID')
+    parser.add_argument('--mras_commit',
+                        required=False,
+                        action='store',
+                        dest='mras_commit',
+                        help='MRA files Commit ID')
     parser.add_argument(
         '-f',
         '--force',
@@ -210,6 +231,15 @@ def parse_args() -> dict[str, Any]:
     if arguments.no_build_arc_rom:
         values['build_arc_rom'] = False
 
+    if arguments.arcadebd_commit:
+        values['arcadebd_commit'] = arguments.arcadebd_commit
+
+    if arguments.mrabd_commit:
+        values['mrabd_commit'] = arguments.mrabd_commit
+
+    if arguments.mras_commit:
+        values['mras_commit'] = arguments.mras_commit
+
     if arguments.force:
         values['force'] = arguments.force
 
@@ -236,7 +266,9 @@ def load_cores_bd(s_name: str) -> dict[str, Any]:
     return d_cores
 
 
-def load_arcade_bd(s_dirpath: str, b_force: bool) -> dict[str, Any]:
+def load_arcade_bd(s_dirpath: str,
+                   b_force: bool,
+                   s_commit: str = '') -> dict[str, Any]:
     """
     Loads Arcade Database from JSON inside ZIP file
     :param s_dirpath: Directory where the ZIP file should be
@@ -244,16 +276,21 @@ def load_arcade_bd(s_dirpath: str, b_force: bool) -> dict[str, Any]:
     :return: Dictionary with data
     """
 
+    if not s_commit:
+        s_commit = 'bd'
+
     s_name: str = 'arcade_roms_db.json'
     s_urlbase: str = 'https://raw.githubusercontent.com/theypsilon/'
-    s_urlbase += 'ArcadeROMsDB_MiSTer/db/'
+    s_urlbase += f'ArcadeROMsDB_MiSTer/{s_commit}/'
     d_arcade: dict[str, Any] = load_zip_bd(s_dirpath, s_name, s_urlbase,
                                            b_force)
 
     return d_arcade
 
 
-def load_mra_bd(s_dirpath: str, b_force: bool) -> dict[str, Any]:
+def load_mra_bd(s_dirpath: str,
+                b_force: bool,
+                s_commit: str = '') -> dict[str, Any]:
     """
     Loads MRA Database from JSON inside ZIP file
     :param s_dirpath: Directory where the ZIP file should be
@@ -261,8 +298,11 @@ def load_mra_bd(s_dirpath: str, b_force: bool) -> dict[str, Any]:
     :return: Dictionary with data
     """
 
+    if not s_commit:
+        s_commit = 'main'
+
     s_name: str = 'jtbindb.json'
-    s_urlbase: str = 'https://raw.githubusercontent.com/jotego/jtcores_mister/main/'
+    s_urlbase: str = f'https://raw.githubusercontent.com/jotego/jtcores_mister/{s_commit}/'
     d_mra: dict[str, Any] = load_zip_bd(s_dirpath, s_name, s_urlbase, b_force)
 
     return d_mra
@@ -322,22 +362,29 @@ def chk_zip_cache(d_arcade_db: dict[str, Any], d_cores_db: dict[str, Any],
                         print(f'{s_name} Bad file!')
 
 
-def chk_mra_cache(d_mra_db: dict[str, Any], d_cores_db: dict[str, Any],
-                  s_mras_path: str, b_force: bool) -> dict[str, Any]:
+def chk_mra_cache(d_mra_db: dict[str, Any],
+                  d_cores_db: dict[str, Any],
+                  s_mras_path: str,
+                  b_force: bool,
+                  s_commit: str = '') -> dict[str, Any]:
     """
     Populates MRA text files disk cache
     :param d_mra_db: Dict with MRA DB
     :param d_cores_db: Dict with cores DB
     :param s_mras_path: Path for the MRA files cache
     :param b_force: If True, delete existing files and download again
+    :param s_commit: If not empyt, commit id to use to download the MRA files
     :return: Dict with MRA groups info
     """
 
     d_mras: dict[str, Any] = {}
 
+    if not s_commit:
+        s_commit = 'master'
+
     d_files: dict[str, Any] = d_mra_db['files']
     d_tags: dict[str, Any] = d_mra_db['tag_dictionary']
-    s_baseurl: str = 'https://raw.githubusercontent.com/jotego/jtbin/master/mra/'
+    s_baseurl: str = f'https://raw.githubusercontent.com/jotego/jtbin/{s_commit}/mra/'
     for s_file in d_files:
         s_name: str = s_file.split('/')[-1]
         if s_name.endswith('.mra') and not '_alternatives' in s_file:
