@@ -112,7 +112,7 @@ def parse_args() -> dict[str, Any]:
     values['build_arc_rom'] = True
     values['force'] = False
     values['arcadebd_commit'] = 'db'
-    values['mrabd_commit'] = '5d57a0a6d9e17e68c281953c6e02cc49805251a5'
+    values['mrabd_commit'] = 'main'
     values['mras_commit'] = '71dae38d45b3646f35345848a87cc4a709b6b6af'
 
     parser = argparse.ArgumentParser(
@@ -277,7 +277,7 @@ def load_arcade_bd(s_dirpath: str,
     """
 
     if not s_commit:
-        s_commit = 'bd'
+        s_commit = 'db'
 
     s_name: str = 'arcade_roms_db.json'
     s_urlbase: str = 'https://raw.githubusercontent.com/theypsilon/'
