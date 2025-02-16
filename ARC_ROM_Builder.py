@@ -28,7 +28,7 @@ from urllib.parse import urlparse, quote, unquote, urljoin
 import socket
 import time
 
-__MY_VERSION__ = '0.0.2'
+__MY_VERSION__ = '0.0.3'
 
 MY_BASEPATH: str = os.path.dirname(sys.argv[0])
 MY_DIRPATH: str = os.path.abspath(MY_BASEPATH)
@@ -280,7 +280,7 @@ def load_arcade_bd(s_dirpath: str,
         s_commit = 'db'
 
     s_name: str = 'arcade_roms_db.json'
-    s_urlbase: str = 'https://raw.githubusercontent.com/theypsilon/'
+    s_urlbase: str = 'https://raw.githubusercontent.com/zakk4223/'
     s_urlbase += f'ArcadeROMsDB_MiSTer/{s_commit}/'
     d_arcade: dict[str, Any] = load_zip_bd(s_dirpath, s_name, s_urlbase,
                                            b_force)
