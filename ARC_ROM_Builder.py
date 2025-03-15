@@ -3,7 +3,7 @@
 # -*- mode: Python; tab-width: 4; indent-tabs-mode: nil; -*-
 # Do not modify previous lines. See PEP 8, PEP 263.
 """
-Copyright (c) 2023, kounch
+Copyright (c) 2023-2025, kounch
 All rights reserved.
 
 SPDX-License-Identifier: BSD-2-Clause
@@ -28,7 +28,7 @@ from urllib.parse import urlparse, quote, unquote, urljoin
 import socket
 import time
 
-__MY_VERSION__ = '0.0.3'
+__MY_VERSION__ = '0.0.4'
 
 MY_BASEPATH: str = os.path.dirname(sys.argv[0])
 MY_DIRPATH: str = os.path.abspath(MY_BASEPATH)
@@ -114,6 +114,7 @@ def parse_args() -> dict[str, Any]:
     values['arcadebd_commit'] = 'db'
     values['mrabd_commit'] = 'main'
     values['mras_commit'] = '71dae38d45b3646f35345848a87cc4a709b6b6af'
+    values['fpga_device'] = 'zxtres'
 
     parser = argparse.ArgumentParser(
         description='ARC and ROM Builder',
@@ -141,6 +142,12 @@ def parse_args() -> dict[str, Any]:
                         action='store',
                         dest='output_dir',
                         help='Output dir name and location')
+    parser.add_argument('-d',
+                        '--device',
+                        required=False,
+                        action='store',
+                        dest='fpga_device',
+                        help='FPGA device')
     parser.add_argument('-a',
                         '--force_arcade_db',
                         required=False,
@@ -207,6 +214,17 @@ def parse_args() -> dict[str, Any]:
 
     if arguments.cache_dir:
         values['cache_dir'] = os.path.abspath(arguments.cache_dir)
+
+    l_devices = ['zxtres', 'neptunoplus']
+    if arguments.fpga_device:
+        if arguments.fpga_device.lower() in l_devices:
+            values['fpga_device'] = arguments.fpga_device.lower()
+        else:
+            LOGGER.warning('Unknown FPGA device %s', arguments.fpga_device)
+
+    if values['fpga_device'] == 'neptunoplus':
+        values['mras_commit'] = '66f0ec2baa1a4c87cd7cb2a885e98cc92df9c971'
+        values['cores_db'] = os.path.join(MY_DIRPATH, 'cores_neptunoplus.json')
 
     if arguments.cores_db:
         values['cores_db'] = os.path.abspath(arguments.cores_db)

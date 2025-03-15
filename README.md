@@ -1,6 +1,6 @@
 # ARC and ROM Builder
 
-Copyright (c) 2023, kounch
+Copyright (c) 2023-2025, kounch
 
 All rights reserved.
 
@@ -18,7 +18,7 @@ Select your desired language / Elija idioma:
 
 ### Features
 
-This is a tool that creates ARC and ROM files. It is main focus is the [ZXTRES family](https://github.com/zxtres/) of FPGA devices, but it may also be useful for others like MiST, MiSTica or SiDi.
+This is a tool that creates ARC and ROM files. It is main focus is the [ZXTRES family](https://github.com/zxtres/) and [neptUNO+](https://github.com/neptunoplus/) FPGA devices, but it may also be useful for others like MiST, MiSTica or SiDi.
 
 These are the main features:
 
@@ -35,17 +35,29 @@ These are the main features:
 
 Install Python 3. On Windows, it's recommended that `py launcher` is selected as an install option.
 
-Copy the files `ARC_ROM_Builder.py` and `cores.json` to a directory with enough available space (3.5GB, at least, if using the default `cores.json` file), and execute the script:
+Copy the files `ARC_ROM_Builder.py` and `cores.json` to a directory with enough available space (3.5GB, at least, if using the default `cores.json` file), and execute the script (for ZXTRES):
 
      python3 ARC_ROM_Builder.py
+
+For neptUNO+, use this command instead:
+
+     python3 ARC_ROM_Builder.py -d neptunoplus
 
 On Windows
 
      py -3 ARC_ROM_Builder.py
 
+For neptUNO+:
+
+     py -3 ARC_ROM_Builder.py -d neptunoplus
+
 Or
 
     ..python.exe ARC_ROM_Builder.py
+
+For neptUNO+:
+
+    ..python.exe ARC_ROM_Builder.py -d neptunoplus
 
 This will create the following file and directory structure
 
@@ -86,6 +98,8 @@ The script has the following parameters:
                           Change the name and location of the Cores DB JSON file
     -O OUTPUT_DIR, --output_dir OUTPUT_DIR
                           Change the Output directory name and location
+    -d FPGA_DEVICE, --device FPGA_DEVICE
+                          Select FPGA device, like zxtres or neptunoplus
     -a, --force_arcade_db
                           Force to download again the cached Arcade DB
     -m, --force_mra_db    Force to download again the cached MRA DB
@@ -127,7 +141,7 @@ Adding or removing items to the cores JSON file will increase or decrease the nu
 
 ### Características
 
-Esta es una herramienta que crea archivos ARC y ROM. Está principalmente orientada a la [familia ZXTRES](https://github.com/zxtres/) de dispositivos FPGA, pero también puede ser útil para otros como MiST, MiSTica o SiDi.
+Esta es una herramienta que crea archivos ARC y ROM. Está principalmente orientada a dispositivos FPGA de la [familia ZXTRES](https://github.com/zxtres/) y [neptUNO+](https://github.com/neptunoplus/), pero también puede ser útil para otros como MiST, MiSTica o SiDi.
 
 Sus características principales son:
 
@@ -144,17 +158,29 @@ Sus características principales son:
 
 Instalar Python 3 para el sistema operativo correspondiente. En el caso de Windows, es interesante incluir `py launcher` en las opciones de instalación.
 
-Copiar los ficheros `ARC_ROM_Builder.py` y `cores.json` en un directorio con suficiente espacio disponible (al menos, 3,5GB, si se usa el fichero `cores.json` por defecto), y ejecutar el script:
+Copiar los ficheros `ARC_ROM_Builder.py` y `cores.json` en un directorio con suficiente espacio disponible (al menos, 3,5GB, si se usa el fichero `cores.json` por defecto), y ejecutar el script (para ZXTRES):
 
     python3 ARC_ROM_Builder.py
+
+Para neptUNO+, usar este otro comando:
+
+     python3 ARC_ROM_Builder.py -d neptunoplus
 
 En Windows
 
     py -3 ARC_ROM_Builder.py
 
+Para neptUNO+:
+
+     py -3 ARC_ROM_Builder.py -d neptunoplus
+
 o bien
 
     ...python.exe ARC_ROM_Builder.py
+
+Para neptUNO+:
+
+    ..python.exe ARC_ROM_Builder.py -d neptunoplus
 
 Esto creará una estructura de ficheros y directorios como la siguiente
 
@@ -195,6 +221,8 @@ El script tiene los siguientes parámetros:
                           Cambiar el nombre y la ubicación del archivo JSON de la BD de Cores
     -O OUTPUT_DIR, --output_dir OUTPUT_DIR
                           Cambiar el nombre y la ubicación del directorio de salida
+    -d FPGA_DEVICE, --device FPGA_DEVICE
+                          Selección de dispositivo, como zxtres o neptunoplus
     -a, --force_arcade_db
                           Fuerza la descarga de nuevo de la base de datos de Arcade almacenada en caché
     -m, --force_mra_db    Fuerza la descarga de nuevo de la base de datos MRA almacenada en caché
@@ -236,7 +264,7 @@ Añadir o quitar elementos al fichero JSON de cores implicará aumentar o reduci
 
 BSD 2-Clause License
 
-Copyright (c) 2023, kounch
+Copyright (c) 2023-2025, kounch
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
