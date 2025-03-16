@@ -27,39 +27,39 @@ These are the main features:
 - Downloads [mra tool](https://github.com/kounch/mra-tools-c/tree/master/release) for the current OS (Mac, Windows or Linux)
 - Builds ARC and ROM files structure for using with Jotego cores
 
-### Software Requirements
+### Optional Software Requirements
 
-- **Python (version 3.9 or later)**. Docs, downloads, etc. [here](https://www.python.org/)
+- Only for the script release, **Python (version 3.9 or later)** is needed. Docs, downloads, etc. [here](https://www.python.org/)
 
 ### Installation and Use
 
 Install Python 3. On Windows, it's recommended that `py launcher` is selected as an install option.
 
-Copy the files `ARC_ROM_Builder.py` and `cores.json` to a directory with enough available space (3.5GB, at least, if using the default `cores.json` file), and execute the script (for ZXTRES):
+Copy the binary file `ARC_ROM_Builder...` along with `cores.json` for ZXTRES, or `cores_neptunoplus.json` for neptUNO+, to a directory with enough available space (3.5GB, at least, if using the default JSON file), and execute.
 
-     python3 ARC_ROM_Builder.py
+For example, for ZXTRES on macOS:
+
+     ARC_ROM_Builder
 
 For neptUNO+, use this command instead:
 
-     python3 ARC_ROM_Builder.py -d neptunoplus
+     ARC_ROM_Builder -d neptunoplus
 
 On Windows
 
-     py -3 ARC_ROM_Builder.py
+     ARC_ROM_Builder.exe
 
-For neptUNO+:
+On Windows, for neptUNO+:
 
-     py -3 ARC_ROM_Builder.py -d neptunoplus
+    ARC_ROM_Builder.exe -d neptunoplus
 
-Or
+Or for the script on Windows (if Python is installed):
 
-    ..python.exe ARC_ROM_Builder.py
+    ...python.exe ARC_ROM_Builder.py
 
-For neptUNO+:
+etc.
 
-    ..python.exe ARC_ROM_Builder.py -d neptunoplus
-
-This will create the following file and directory structure
+This will create the following file and directory structure:
 
      <AC_ROM_Builder directory/
        |
@@ -152,39 +152,37 @@ Sus características principales son:
 - Descarga la [herramienta mra](https://github.com/kounch/mra-tools-c/tree/master/release) para el sistema operativo utilizado (Mac, Windows o Linux)
 - Construye una estructura de archivos ARC y ROM para usar con los cores de Jotego
 
-### Software necesario
+### Software opcionalmente necesario
 
-- **Python (versión 3.9 o superior)**. Documentación, descarga, etc. [aquí](https://www.python.org/)
+- Sólo para la versión de script, es necesario **Python (versión 3.9 o superior)**. Documentación, descarga, etc. [aquí](https://www.python.org/)
 
 ### Instalación y uso
 
-Instalar Python 3 para el sistema operativo correspondiente. En el caso de Windows, es interesante incluir `py launcher` en las opciones de instalación.
+Copiar el fichero binario `ARC_ROM_Builder...` junto con `cores.json` para ZXTRES, o bien `cores_neptunoplus.json` para neptUNO+, en un directorio con suficiente espacio disponible (al menos, 3,5GB, si se usa el fichero JSON por defecto), y ejecutarlo:
 
-Copiar los ficheros `ARC_ROM_Builder.py` y `cores.json` en un directorio con suficiente espacio disponible (al menos, 3,5GB, si se usa el fichero `cores.json` por defecto), y ejecutar el script (para ZXTRES):
+Por ejemplo, en macOS:
 
-    python3 ARC_ROM_Builder.py
+    ARC_ROM_Builder
 
 Para neptUNO+, usar este otro comando:
 
-     python3 ARC_ROM_Builder.py -d neptunoplus
+     ARC_ROM_Builder -d neptunoplus
 
 En Windows
 
-    py -3 ARC_ROM_Builder.py
+    ARC_ROM_Builder.exe
 
-Para neptUNO+:
+En Windows, para neptUNO+:
 
-     py -3 ARC_ROM_Builder.py -d neptunoplus
+     ARC_ROM_Builder.exe -d neptunoplus
 
-o bien
+O bien para el script en Windows (si Python está instalado)
 
     ...python.exe ARC_ROM_Builder.py
 
-Para neptUNO+:
+etc.
 
-    ..python.exe ARC_ROM_Builder.py -d neptunoplus
-
-Esto creará una estructura de ficheros y directorios como la siguiente
+Esto creará una estructura de ficheros y directorios como la siguiente:
 
     <directorio de ARC_ROM_Builder/
        |
