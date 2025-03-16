@@ -84,9 +84,9 @@ def main():
     chk_zip_cache(d_arcade_db, d_cores_db, s_roms_path, arg_data['force'])
 
     print('Checking MRA files cache...')
-    d_mras: dict[str, Any] = chk_mra_cache(d_mra_db, d_cores_db, s_mras_path,
-                                           arg_data['force'],
-                                           arg_data['mras_commit'])
+    d_mras: dict[str, Any] = chk_mra_cache(
+        d_mra_db, d_cores_db, s_mras_path, arg_data['force']
+        or arg_data['force_fm'], arg_data['mras_commit'])
 
     if arg_data['build_arc_rom']:
         print('Building ARC files...')
@@ -107,6 +107,7 @@ def parse_args() -> dict[str, Any]:
     values['output_dir'] = os.path.join(MY_DIRPATH, 'JOTEGO')
     values['force_bda'] = False
     values['force_bdm'] = False
+    values['force_fm'] = False
     values['include'] = []
     values['exclude'] = []
     values['build_arc_rom'] = True
@@ -160,6 +161,12 @@ def parse_args() -> dict[str, Any]:
                         action='store_true',
                         dest='force_bdm',
                         help='Force to download again cached MRA DB file')
+    parser.add_argument('-M',
+                        '--force_mra_files',
+                        required=False,
+                        action='store_true',
+                        dest='force_fm',
+                        help='Force to download again cached MRA files')
     parser.add_argument('-i',
                         '--include',
                         required=False,
@@ -237,6 +244,9 @@ def parse_args() -> dict[str, Any]:
 
     if arguments.force_bdm:
         values['force_bdm'] = arguments.force_bdm
+
+    if arguments.force_fm:
+        values['force_fm'] = arguments.force_fm
 
     if arguments.include:
         for s_include in arguments.include:

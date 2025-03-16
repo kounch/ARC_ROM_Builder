@@ -103,6 +103,8 @@ The script has the following parameters:
     -a, --force_arcade_db
                           Force to download again the cached Arcade DB
     -m, --force_mra_db    Force to download again the cached MRA DB
+    -M, --force_mra_files
+                          Force to download again cached MRA files
     -i INCLUDE, --include INCLUDE
                           Names of cores to include, separated by commas
     -e EXCLUDE, --exclude EXCLUDE
@@ -226,6 +228,8 @@ El script tiene los siguientes parámetros:
     -a, --force_arcade_db
                           Fuerza la descarga de nuevo de la base de datos de Arcade almacenada en caché
     -m, --force_mra_db    Fuerza la descarga de nuevo de la base de datos MRA almacenada en caché
+    -M, --force_mra_files
+                          Fuerza la descarga de los ficheros MRA en caché
     -i INCLUDE, --include INCLUDE
                           Lista de nombres de cores a incluir, separados por comas
     -e EXCLUDE, --exclude EXCLUDE
