@@ -295,4 +295,11 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 [Update All](https://github.com/theypsilon/Update_All_MiSTer) for [MiSTer](https://github.com/MiSTer-devel/Main_MiSTer/wiki)
 
 Copyright © 2020-2022, [José Manuel Barroso Galindo](https://twitter.com/josembarroso).
-Released under the [GPL v3 License](LICENSE).
+Released under the [GPL v3 License](https://www.gnu.org/licenses/gpl-3.0.en.html#license-text).
+
+---
+
+[Nuitka Python compiler](https://github.com/Nuitka/Nuitka)
+
+Copyright 2025, [Kay Hayen](mailto:kay.hayen@gmail.com).
+Licensed under the [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0)
