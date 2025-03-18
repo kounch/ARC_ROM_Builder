@@ -28,7 +28,7 @@ from urllib.parse import urlparse, quote, unquote, urljoin
 import socket
 import time
 
-__MY_VERSION__ = '0.0.4'
+__MY_VERSION__ = '1.0.0'
 
 MY_BASEPATH: str = os.path.dirname(sys.argv[0])
 MY_DIRPATH: str = os.path.abspath(MY_BASEPATH)
@@ -91,7 +91,7 @@ def main():
     if arg_data['build_arc_rom']:
         print('Building ARC files...')
         build_arc_files(d_mras, d_cores_db, s_out_path, s_mras_path,
-                        s_roms_path, s_cache_path)
+                        s_roms_path, s_cache_path, arg_data['group_roms'], arg_data['default_mra'])
 
 
 def parse_args() -> dict[str, Any]:
@@ -116,6 +116,8 @@ def parse_args() -> dict[str, Any]:
     values['mrabd_commit'] = 'main'
     values['mras_commit'] = '71dae38d45b3646f35345848a87cc4a709b6b6af'
     values['fpga_device'] = 'zxtres'
+    values['group_roms'] = False
+    values['default_mra'] = True
 
     parser = argparse.ArgumentParser(
         description='ARC and ROM Builder',
@@ -200,6 +202,12 @@ def parse_args() -> dict[str, Any]:
                         action='store',
                         dest='mras_commit',
                         help='MRA files Commit ID')
+    parser.add_argument('-g',
+                        '--group_roms',
+                        required=False,
+                        action='store_true',
+                        dest='group_roms',
+                        help='Group ARCs and ROMs in folders by core name')
     parser.add_argument(
         '-f',
         '--force',
@@ -232,6 +240,7 @@ def parse_args() -> dict[str, Any]:
     if values['fpga_device'] == 'neptunoplus':
         values['mras_commit'] = '66f0ec2baa1a4c87cd7cb2a885e98cc92df9c971'
         values['cores_db'] = os.path.join(MY_DIRPATH, 'cores_neptunoplus.json')
+        values['default_mra'] = False
 
     if arguments.cores_db:
         values['cores_db'] = os.path.abspath(arguments.cores_db)
@@ -270,6 +279,9 @@ def parse_args() -> dict[str, Any]:
 
     if arguments.force:
         values['force'] = arguments.force
+
+    if arguments.group_roms:
+        values['group_roms'] = arguments.group_roms
 
     LOGGER.debug(values)
     return values
@@ -433,9 +445,15 @@ def chk_mra_cache(d_mra_db: dict[str, Any],
     return d_mras
 
 
-def build_arc_files(d_mras: dict[str, Any], d_cores_db: dict[str, Any],
-                    s_out_path: str, s_mras_path: str, s_roms_path,
-                    s_cache_path: str):
+def build_arc_files(d_mras: dict[str, Any],
+                    d_cores_db: dict[str, Any],
+                    s_out_path: str,
+                    s_mras_path: str,
+                    s_roms_path: str,
+                    s_cache_path: str,
+                    b_group: bool = True,
+                    b_builddef: bool = False
+                    ):
     """
     Builds ARC and ROM files from MRA and ROM ZIP files
     :param d_mras: Dict with MRA groups info
@@ -443,6 +461,8 @@ def build_arc_files(d_mras: dict[str, Any], d_cores_db: dict[str, Any],
     :param s_mras_path: Path for the MRA files cache
     :param s_roms_path: Path for the ROM ZIP files cache
     :param s_cache_path: Path to the main cache (to find the bin)
+    :param b_group: If True, group multiple ARC folders by core name
+    :param b_builddef: If True, create a default JT... ARC file
     :return: Nothing
     """
 
@@ -455,7 +475,7 @@ def build_arc_files(d_mras: dict[str, Any], d_cores_db: dict[str, Any],
         for s_mra, l_mra in d_mras.items():
             s_basename_arc: str = ''.join(s_mra.split('arcade'))
             s_subdir_arc: str = ''
-            if len(l_mra) > 1:
+            if len(l_mra) > 1 and b_group:
                 s_subdir_arc: str = ''.join(s_basename_arc.split('jt')).upper()
 
             for s_submra in l_mra:
@@ -464,6 +484,7 @@ def build_arc_files(d_mras: dict[str, Any], d_cores_db: dict[str, Any],
                 l_mra_params: list[str] = []
 
                 s_arc_path: str = s_out_path
+                # Build default ARC and ROM
                 if s_subdir_arc == '' or (default_mra != '' and
                                           s_submra.startswith(default_mra)):
                     s_arc_name: str = ''.join(s_mra.split('arcade')) + '.arc'
@@ -477,7 +498,8 @@ def build_arc_files(d_mras: dict[str, Any], d_cores_db: dict[str, Any],
                         s_arc_name.upper(), s_mra_path
                     ]
                     LOGGER.debug(' '.join(l_mra_params))
-                    run_process(l_mra_params, s_submra)
+                    if b_builddef:
+                        run_process(l_mra_params, s_submra)
 
                 if s_subdir_arc != '':
                     s_arc_path = os.path.join(s_arc_path, s_subdir_arc)
@@ -485,6 +507,7 @@ def build_arc_files(d_mras: dict[str, Any], d_cores_db: dict[str, Any],
                         pathlib.Path(s_arc_path).mkdir(parents=True,
                                                        exist_ok=True)
 
+                # Build ARC and ROM
                 l_mra_params = [
                     s_mra_binpath, '-A', '-z', s_roms_path, '-O', s_arc_path,
                     s_mra_path

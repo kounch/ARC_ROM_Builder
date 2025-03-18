@@ -110,6 +110,7 @@ The script has the following parameters:
     -e EXCLUDE, --exclude EXCLUDE
                           Names of cores to exclude, separated by commas
     -n, --no_arc_rom      Do not build ARC and ROM files
+    -g, --group_roms      Group ARCs and ROMs in folders by core name
     -f, --force           Force to download again cached ZIP and MRA files
 
 #### Core database
@@ -233,6 +234,7 @@ El script tiene los siguientes parámetros:
     -e EXCLUDE, --exclude EXCLUDE
                           Lista de nombres de cores a excluir, separados por comas
     -n, --no_arc_rom      No crear archivos ARC y ROM
+    -g, --group_roms      Agrupar ficheros ARC y ROM en directorios según el nombre del core
     -f, --force           Fuerza la descarga de nuevo de los archivos ZIP y MRA almacenados en caché
 
 #### Base de datos de cores

@@ -47,6 +47,18 @@
             "default_arc": "jtcop",
             "default_mra": "Robocop"
         },
+        "jtcps1": {
+            "default_arc": "",
+            "default_mra": ""
+        },
+        "jtcps2": {
+            "default_arc": "",
+            "default_mra": ""
+        },
+        "jtcps15": {
+            "default_arc": "",
+            "default_mra": ""
+        },
         "jtdd": {
             "default_arc": "",
             "default_mra": ""
@@ -188,6 +200,10 @@
             "default_mra": "Secret Agent"
         },
         "jttmnt": {
+            "default_arc": "",
+            "default_mra": ""
+        },
+        "jttoki": {
             "default_arc": "",
             "default_mra": ""
         },
