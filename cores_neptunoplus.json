@@ -219,6 +219,10 @@
             "default_arc": "",
             "default_mra": ""
         },
+        "jttwin16": {
+            "default_arc": "",
+            "default_mra": ""
+        },
         "jtvigil": {
             "default_arc": "",
             "default_mra": ""
@@ -228,6 +232,10 @@
             "default_mra": ""
         },
         "jtwwfss": {
+            "default_arc": "",
+            "default_mra": ""
+        },
+        "jtxmen": {
             "default_arc": "",
             "default_mra": ""
         },
