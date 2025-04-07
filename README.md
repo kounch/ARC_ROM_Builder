@@ -35,7 +35,7 @@ These are the main features:
 
 Install Python 3. On Windows, it's recommended that `py launcher` is selected as an install option.
 
-Copy the binary file `ARC_ROM_Builder...` along with `cores.json` for ZXTRES, or `cores_neptunoplus.json` for neptUNO+, to a directory with enough available space (3.5GB, at least, if using the default JSON file), and execute.
+Copy the binary file `ARC_ROM_Builder...` along with `cores.json` for ZXTRES, or `cores_neptunoplus.json` for neptUNO+, to a directory with enough available space (3.5GiB, at least, if using the default JSON file - more than 20GiB if using `--alternatives` option), and execute.
 
 For example, for ZXTRES on macOS:
 
@@ -111,6 +111,7 @@ The script has the following parameters:
                           Names of cores to exclude, separated by commas
     -n, --no_arc_rom      Do not build ARC and ROM files
     -g, --group_roms      Group ARCs and ROMs in folders by core name
+    -A, --alternatives    Include alternative ROMs
     -f, --force           Force to download again cached ZIP and MRA files
 
 #### Core database
@@ -159,7 +160,7 @@ Sus características principales son:
 
 ### Instalación y uso
 
-Copiar el fichero binario `ARC_ROM_Builder...` junto con `cores.json` para ZXTRES, o bien `cores_neptunoplus.json` para neptUNO+, en un directorio con suficiente espacio disponible (al menos, 3,5GB, si se usa el fichero JSON por defecto), y ejecutarlo:
+Copiar el fichero binario `ARC_ROM_Builder...` junto con `cores.json` para ZXTRES, o bien `cores_neptunoplus.json` para neptUNO+, en un directorio con suficiente espacio disponible (al menos, 3,5GiB, si se usa el fichero JSON por defecto - más de 20GiB si se usa la opción `--alternatives`), y ejecutarlo:
 
 Por ejemplo, en macOS:
 
@@ -235,6 +236,7 @@ El script tiene los siguientes parámetros:
                           Lista de nombres de cores a excluir, separados por comas
     -n, --no_arc_rom      No crear archivos ARC y ROM
     -g, --group_roms      Agrupar ficheros ARC y ROM en directorios según el nombre del core
+    -A, --alternatives    Incluir ROMs alternativas
     -f, --force           Fuerza la descarga de nuevo de los archivos ZIP y MRA almacenados en caché
 
 #### Base de datos de cores

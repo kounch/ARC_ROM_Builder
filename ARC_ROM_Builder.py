@@ -10,7 +10,7 @@ SPDX-License-Identifier: BSD-2-Clause
 """
 
 from __future__ import print_function
-from typing import Any
+from typing import Any, Optional
 import logging
 import sys
 import platform
@@ -27,8 +27,9 @@ from urllib.error import HTTPError, URLError
 from urllib.parse import urlparse, quote, unquote, urljoin
 import socket
 import time
+import xml.etree.ElementTree as ET
 
-__MY_VERSION__ = '1.0.0'
+__MY_VERSION__ = '1.1.0'
 
 MY_BASEPATH: str = os.path.dirname(sys.argv[0])
 MY_DIRPATH: str = os.path.abspath(MY_BASEPATH)
@@ -86,12 +87,14 @@ def main():
     print('Checking MRA files cache...')
     d_mras: dict[str, Any] = chk_mra_cache(
         d_mra_db, d_cores_db, s_mras_path, arg_data['force']
-        or arg_data['force_fm'], arg_data['mras_commit'])
+        or arg_data['force_fm'], arg_data['mras_commit'],
+        arg_data['alternatives'])
 
     if arg_data['build_arc_rom']:
         print('Building ARC files...')
         build_arc_files(d_mras, d_cores_db, s_out_path, s_mras_path,
-                        s_roms_path, s_cache_path, arg_data['group_roms'], arg_data['default_mra'])
+                        s_roms_path, s_cache_path, arg_data['group_roms'],
+                        arg_data['default_mra'], arg_data['extrarom_urls'])
 
 
 def parse_args() -> dict[str, Any]:
@@ -118,6 +121,11 @@ def parse_args() -> dict[str, Any]:
     values['fpga_device'] = 'zxtres'
     values['group_roms'] = False
     values['default_mra'] = True
+    values['alternatives'] = False
+    values['extrarom_urls'] = [
+        'https://archive.org/download/mame-0.260-roms-non-merged/MAME%200.260%20ROMs%20%28non-merged%29/MAME%200.260%20ROMs%20%28non-merged%29/',
+        'https://archive.org/download/fbnarcade-fullnonmerged/arcade/'
+    ]
 
     parser = argparse.ArgumentParser(
         description='ARC and ROM Builder',
@@ -208,6 +216,12 @@ def parse_args() -> dict[str, Any]:
                         action='store_true',
                         dest='group_roms',
                         help='Group ARCs and ROMs in folders by core name')
+    parser.add_argument('-A',
+                        '--alternatives',
+                        required=False,
+                        action='store_true',
+                        dest='alternatives',
+                        help='Include Alternatives')
     parser.add_argument(
         '-f',
         '--force',
@@ -238,7 +252,7 @@ def parse_args() -> dict[str, Any]:
             LOGGER.warning('Unknown FPGA device %s', arguments.fpga_device)
 
     if values['fpga_device'] == 'neptunoplus':
-        values['mras_commit'] = '66f0ec2baa1a4c87cd7cb2a885e98cc92df9c971'
+        values['mras_commit'] = '77e517dbce2e88b503825326fb5811215a0d756d'
         values['cores_db'] = os.path.join(MY_DIRPATH, 'cores_neptunoplus.json')
         values['default_mra'] = False
 
@@ -282,6 +296,9 @@ def parse_args() -> dict[str, Any]:
 
     if arguments.group_roms:
         values['group_roms'] = arguments.group_roms
+
+    if arguments.alternatives:
+        values['alternatives'] = arguments.alternatives
 
     LOGGER.debug(values)
     return values
@@ -406,14 +423,16 @@ def chk_mra_cache(d_mra_db: dict[str, Any],
                   d_cores_db: dict[str, Any],
                   s_mras_path: str,
                   b_force: bool,
-                  s_commit: str = '') -> dict[str, Any]:
+                  s_commit: str = '',
+                  b_alternatives: bool = False) -> dict[str, Any]:
     """
     Populates MRA text files disk cache
     :param d_mra_db: Dict with MRA DB
     :param d_cores_db: Dict with cores DB
     :param s_mras_path: Path for the MRA files cache
     :param b_force: If True, delete existing files and download again
-    :param s_commit: If not empyt, commit id to use to download the MRA files
+    :param s_commit: If not empty, commit id to use to download the MRA files
+    :param b_alternatives: If true, download also alternatives MRA files
     :return: Dict with MRA groups info
     """
 
@@ -427,20 +446,22 @@ def chk_mra_cache(d_mra_db: dict[str, Any],
     s_baseurl: str = f'https://raw.githubusercontent.com/jotego/jtbin/{s_commit}/mra/'
     for s_file in d_files:
         s_name: str = s_file.split('/')[-1]
-        if s_name.endswith('.mra') and not '_alternatives' in s_file:
-            for s_item in d_files[s_file]['tags']:
-                for s_tagitem in d_tags:
-                    if d_tags[s_tagitem] == s_item and ''.join(
-                            s_tagitem.split('arcade')) in d_cores_db:
-                        if not s_tagitem in d_mras:
-                            d_mras[s_tagitem] = []
-                        d_mras[s_tagitem].append(s_name)
-                        b_ok = chk_or_download(s_mras_path, s_name,
-                                               d_files[s_file]['hash'],
-                                               d_files[s_file]['size'],
-                                               s_baseurl + s_name, b_force)
-                        if not b_ok:
-                            print(f'{s_name} Bad file!')
+        s_urlpath: str = '/'.join(s_file.split('/')[1:])
+        if s_name.endswith('.mra'):
+            if not '_alternatives' in s_file or b_alternatives:
+                for s_item in d_files[s_file]['tags']:
+                    for s_tagitem in d_tags:
+                        if d_tags[s_tagitem] == s_item and ''.join(
+                                s_tagitem.split('arcade')) in d_cores_db:
+                            if not s_tagitem in d_mras:
+                                d_mras[s_tagitem] = []
+                            d_mras[s_tagitem].append(s_name)
+                            b_ok = chk_or_download(
+                                s_mras_path, s_name, d_files[s_file]['hash'],
+                                d_files[s_file]['size'],
+                                urljoin(s_baseurl, s_urlpath), b_force)
+                            if not b_ok:
+                                print(f'{s_name} Bad file!')
 
     return d_mras
 
@@ -452,8 +473,8 @@ def build_arc_files(d_mras: dict[str, Any],
                     s_roms_path: str,
                     s_cache_path: str,
                     b_group: bool = True,
-                    b_builddef: bool = False
-                    ):
+                    b_builddef: bool = False,
+                    l_extrarom_urls: Optional[list[str]] = None):
     """
     Builds ARC and ROM files from MRA and ROM ZIP files
     :param d_mras: Dict with MRA groups info
@@ -463,8 +484,12 @@ def build_arc_files(d_mras: dict[str, Any],
     :param s_cache_path: Path to the main cache (to find the bin)
     :param b_group: If True, group multiple ARC folders by core name
     :param b_builddef: If True, create a default JT... ARC file
+    :param l_extrarom_urls: 
     :return: Nothing
     """
+
+    if l_extrarom_urls is None:
+        l_extrarom_urls = []
 
     if not os.path.isdir(s_out_path):
         pathlib.Path(s_out_path).mkdir(parents=True, exist_ok=True)
@@ -480,6 +505,7 @@ def build_arc_files(d_mras: dict[str, Any],
 
             for s_submra in l_mra:
                 s_mra_path: str = os.path.join(s_mras_path, s_submra)
+                check_mra_romfile(s_mra_path, s_roms_path, l_extrarom_urls)
                 default_mra = d_cores_db[s_basename_arc]['default_mra']
                 l_mra_params: list[str] = []
 
@@ -514,6 +540,42 @@ def build_arc_files(d_mras: dict[str, Any],
                 ]
                 LOGGER.debug(' '.join(l_mra_params))
                 run_process(l_mra_params, s_submra)
+
+
+def check_mra_romfile(s_mra_path: str,
+                      s_roms_path: str,
+                      l_urlsbase: Optional[list[str]] = None):
+    """
+    Check if ROM ZIP file exists and try to download if possible
+    :param s_mra_path: MRA file path
+    :param s_roms_path: Directory where the ZIP file should be
+    :param s_urlbase: Base URL to compose the path to download
+    """
+
+    if l_urlsbase is None:
+        l_urlsbase = []
+    tree: Any = ET.parse(s_mra_path)
+    root: Any = tree.getroot()
+    el_name: Any = root.find("./setname")
+    #el_mameversion = root.find("./mameversion")
+    if el_name is not None:
+        s_name: str = el_name.text
+        s_zipname: str = f'{s_name}.zip'
+        if not os.path.isfile(os.path.join(s_roms_path, s_zipname)):
+            if l_urlsbase:
+                b_ok: bool = False
+                for s_urlbase in l_urlsbase:
+                    print(f'{s_zipname} not found. Trying other download...', )
+                    s_urlpath: str = urljoin(s_urlbase, s_zipname)
+                    b_ok = chk_or_download(s_roms_path,
+                                           s_zipname,
+                                           s_url=s_urlpath)
+                    if b_ok:
+                        break
+                if not b_ok:
+                    print(f'{s_name} Bad file!')
+            else:
+                print(f'{s_name} not found!')
 
 
 def load_zip_bd(s_dirpath: str, s_name: str, s_urlbase: str,
@@ -692,7 +754,7 @@ def get_file_hash(s_file: str) -> str:
     return md5_hash.hexdigest()
 
 
-def run_process(l_mra_params: list[str], s_item: str):
+def run_process(l_mra_params: list[str], s_item: str) -> str:
     """
     Runs a process, printing stdout, and logging an errir if stderr not empty
     :param l_mra_params: list of command line command and parameters
@@ -708,6 +770,8 @@ def run_process(l_mra_params: list[str], s_item: str):
         print(mra_process.stdout)
     if mra_process.stderr != '':
         LOGGER.error('Problem processing %s: %s', s_item, mra_process.stderr)
+
+    return mra_process.stdout
 
 
 if __name__ == "__main__":
