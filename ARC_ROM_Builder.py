@@ -519,9 +519,9 @@ def build_arc_files(d_mras: dict[str, Any],
                             'default_arc'] + '.arc'
 
                     l_mra_params = [
-                        s_mra_binpath, '-A', '-z', s_roms_path, '-O',
-                        s_arc_path, '-a',
-                        s_arc_name.upper(), s_mra_path
+                        f'"{s_mra_binpath}"', '-A', '-z', f'"{s_roms_path}"',
+                        '-O', f'"{s_arc_path}"', '-a',
+                        f'"{s_arc_name.upper()}"', f'"{s_mra_path}"'
                     ]
                     LOGGER.debug(' '.join(l_mra_params))
                     if b_builddef:
@@ -535,8 +535,8 @@ def build_arc_files(d_mras: dict[str, Any],
 
                 # Build ARC and ROM
                 l_mra_params = [
-                    s_mra_binpath, '-A', '-z', s_roms_path, '-O', s_arc_path,
-                    s_mra_path
+                    f'"{s_mra_binpath}"', '-A', '-z', f'"{s_roms_path}"', '-O',
+                    f'"{s_arc_path}"', f'"{s_mra_path}"'
                 ]
                 LOGGER.debug(' '.join(l_mra_params))
                 run_process(l_mra_params, s_submra)
@@ -629,7 +629,7 @@ def chk_or_download_mrabin(s_mrabin_dirpath: str,
 
     b_ok: bool = True
 
-    s_mra_binname: str = 'mra'
+    s_mra_binname: str = 'mra.exe'
     s_mra_binurl: str = 'https://github.com/kounch/mra-tools-c/raw/master/release/'
 
     # Universal binary for macOS, Linux, Windows
@@ -649,7 +649,8 @@ def chk_or_download_mrabin(s_mrabin_dirpath: str,
                                b_force=b_force)
         time.sleep(15)  # Give Windows some time to check the file
         if sys.platform != 'win32':
-            run_process(['chmod', 'a+x', s_mra_binpath], 'mra tool binary')
+            run_process(['chmod', 'a+x', f'"{s_mra_binpath}"'],
+                        'mra tool binary')
         if not b_ok:
             s_mra_binpath = ''
 
@@ -757,8 +758,9 @@ def run_process(l_mra_params: list[str], s_item: str) -> str:
     :return: Nothing
     """
 
-    mra_process = subprocess.run(l_mra_params,
+    mra_process = subprocess.run(' '.join(l_mra_params),
                                  capture_output=True,
+                                 shell=True,
                                  check=False,
                                  encoding='utf8')
     if mra_process.stdout != '':
