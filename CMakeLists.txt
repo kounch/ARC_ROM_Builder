@@ -97,6 +97,7 @@ function(BUILD_MAC ARCH_TO_BUILD)
         COMMAND ${CMAKE_COMMAND} -E copy_directory ${OUTPUT_DIR}/docs ${MAC_BUILD_DIR}
         COMMAND ${CMAKE_COMMAND} -E remove_directory ${MAC_BUILD_DIR}/${PROJECT_NAME}.*
         COMMAND ${CMAKE_COMMAND} -E remove ${MAC_ZIP_FILE}
+        COMMAND ${CMAKE_COMMAND} -E remove ".DS_Store"
         COMMAND ${CMAKE_COMMAND} -E tar "cf" "${MAC_ZIP_FILE}" --format=zip -- .
         WORKING_DIRECTORY ${MAC_BUILD_DIR}
         COMMENT "MacOS Zip"
@@ -123,6 +124,7 @@ function(BUILD_WIN ARCH_TO_PACKAGE)
 
     add_custom_command(TARGET "ARC_ROM_Builder_win_${ARCH_TO_PACKAGE}" POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E remove ${WIN_ZIP_FILE}
+        COMMAND ${CMAKE_COMMAND} -E remove ".DS_Store"
         COMMAND ${CMAKE_COMMAND} -E tar "cf" "${WIN_ZIP_FILE}" --format=zip -- .
         WORKING_DIRECTORY ${WIN_BUILD_DIR}
         COMMENT "Compressing"
@@ -151,6 +153,7 @@ function(BUILD_PYTHON)
         TARGET "ARC_ROM_Builder_python" 
         POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E remove ${PYTHON_ZIP_FILE}
+        COMMAND ${CMAKE_COMMAND} -E remove ".DS_Store"
         COMMAND ${CMAKE_COMMAND} -E tar "cf" "${PYTHON_ZIP_FILE}" --format=zip -- .
         WORKING_DIRECTORY ${PYTHON_BUILD_DIR}
         COMMENT "Compressing"
