@@ -632,17 +632,12 @@ def chk_or_download_mrabin(s_mrabin_dirpath: str,
     s_mra_binname: str = 'mra'
     s_mra_binurl: str = 'https://github.com/kounch/mra-tools-c/raw/master/release/'
 
-    if sys.platform == 'darwin':
-        s_mra_binurl = urljoin(s_mra_binurl, 'macos/')
-    elif sys.platform == 'win32':
-        s_mra_binurl = urljoin(s_mra_binurl, 'windows/')
-        s_mra_binname = 'mra.exe'
-    else:  # Assume Linux
+    # Universal binary for macOS, Linux, Windows
+    s_mra_binurl = urljoin(s_mra_binurl, 'cosmopolitan/')
+    if platform.machine() == 'armv7l':
+        # Linux ARM32 binary
         s_mra_binurl = urljoin(s_mra_binurl, 'linux/')
-        if platform.machine() == 'armv7l':
-            s_mra_binname = 'mra.armv7l'
-        elif platform.machine() == 'aarch64':
-            s_mra_binname = 'mra.aarch64'
+        s_mra_binname = 'mra.armv7l'
 
     s_mra_binpath: str = os.path.join(s_mrabin_dirpath, s_mra_binname)
     s_mra_binurl = urljoin(s_mra_binurl, s_mra_binname)
