@@ -29,7 +29,7 @@ import socket
 import time
 import xml.etree.ElementTree as ET
 
-__MY_VERSION__ = '1.1.0'
+__MY_VERSION__ = '1.1.1'
 
 MY_BASEPATH: str = os.path.dirname(sys.argv[0])
 MY_DIRPATH: str = os.path.abspath(MY_BASEPATH)
@@ -61,6 +61,33 @@ def main():
     s_mras_path: str = os.path.join(s_cache_path, 'mra')
     s_out_path: str = arg_data['output_dir']
 
+    d_tmp: dict[str, Any] = load_cores_bd(arg_data['cores_db'])
+    if not d_tmp:
+        LOGGER.error("There's no Cores DB JSON file")
+        sys.exit(2)
+
+    # Load commit IDs from JSON, if the exist
+    if 'commits' in d_tmp:
+        d_commits = d_tmp['commits']
+        if not arg_data['arcadebd_commit']:
+            arg_data['arcadebd_commit'] = d_commits.get('arcadebd_commit', '')
+        if not arg_data['mrabd_commit']:
+            arg_data['mrabd_commit'] = d_commits.get('mrabd_commit', '')
+        if not arg_data['mras_commit']:
+            arg_data['mras_commit'] = d_commits.get('mras_commit', '')
+
+    # Default commit IDs
+    if not arg_data['arcadebd_commit']:
+        arg_data['arcadebd_commit'] = 'db'
+    if not arg_data['mrabd_commit']:
+        arg_data['mrabd_commit'] = 'main'
+    if not arg_data['mras_commit']:
+        arg_data['mras_commit'] = 'master'
+
+    LOGGER.debug(arg_data)
+
+    d_cores_db = filter_cores(d_tmp, arg_data['include'], arg_data['exclude'])
+
     d_arcade_db: dict[str, Any] = load_arcade_bd(s_cache_path,
                                                  arg_data['force_bda'],
                                                  arg_data['arcadebd_commit'])
@@ -73,13 +100,6 @@ def main():
     if not d_mra_db:
         LOGGER.error("There's no MRA JSON data")
         sys.exit(2)
-
-    d_tmp: dict[str, Any] = load_cores_bd(arg_data['cores_db'])
-    if not d_tmp:
-        LOGGER.error("There's no Cores DB JSON file")
-        sys.exit(2)
-
-    d_cores_db = filter_cores(d_tmp, arg_data['include'], arg_data['exclude'])
 
     print('Checking ROM ZIP files cache...')
     chk_zip_cache(d_arcade_db, d_cores_db, s_roms_path, arg_data['force'])
@@ -115,9 +135,9 @@ def parse_args() -> dict[str, Any]:
     values['exclude'] = []
     values['build_arc_rom'] = True
     values['force'] = False
-    values['arcadebd_commit'] = 'db'
-    values['mrabd_commit'] = 'main'
-    values['mras_commit'] = '71dae38d45b3646f35345848a87cc4a709b6b6af'
+    values['arcadebd_commit'] = ''
+    values['mrabd_commit'] = ''
+    values['mras_commit'] = ''
     values['fpga_device'] = 'zxtres'
     values['group_roms'] = False
     values['default_mra'] = True
@@ -252,7 +272,6 @@ def parse_args() -> dict[str, Any]:
             LOGGER.warning('Unknown FPGA device %s', arguments.fpga_device)
 
     if values['fpga_device'] == 'neptunoplus':
-        values['mras_commit'] = '77e517dbce2e88b503825326fb5811215a0d756d'
         values['cores_db'] = os.path.join(MY_DIRPATH, 'cores_neptunoplus.json')
         values['default_mra'] = False
 

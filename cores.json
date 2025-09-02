@@ -1,4 +1,9 @@
     {
+        "commits": {
+            "arcadebd_commit": "db",
+            "mrabd_commit": "main",
+            "mras_commit": "71dae38d45b3646f35345848a87cc4a709b6b6af'"
+        },
         "arcadeataritetris": {
             "default_arc": "",
             "default_mra": ""

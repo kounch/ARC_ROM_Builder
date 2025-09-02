@@ -1,4 +1,9 @@
     {
+        "commits": {
+            "arcadebd_commit": "db",
+            "mrabd_commit": "main",
+            "mras_commit": "ae265d3027074d148bbc9b7373731007d31a0b24"
+        },
         "jt1942": {
             "default_arc": "",
             "default_mra": ""
@@ -6,6 +11,10 @@
         "jt1943": {
             "default_arc": "jt1943",
             "default_mra": "1943 The Battle of Midway (Euro)"
+        },
+        "jtajax": {
+            "default_arc": "",
+            "default_mra": ""
         },
         "jtaliens": {
             "default_arc": "",
