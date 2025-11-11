@@ -66,7 +66,7 @@ def main():
         LOGGER.error("There's no Cores DB JSON file")
         sys.exit(2)
 
-    # Load commit IDs from JSON, if the exist
+    # Load commit IDs from JSON, if they exist
     if 'commits' in d_tmp:
         d_commits = d_tmp['commits']
         if not arg_data['arcadebd_commit']:
