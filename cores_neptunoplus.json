@@ -152,6 +152,10 @@
             "default_arc": "jtpang",
             "default_mra": "Pang"
         },
+        "jtpaclan": {
+            "default_arc": "",
+            "default_mra": ""
+        },
         "jtparoda": {
             "default_arc": "",
             "default_mra": ""
@@ -181,6 +185,10 @@
             "default_mra": ""
         },
         "jts16b": {
+            "default_arc": "",
+            "default_mra": ""
+        },
+        "jts18": {
             "default_arc": "",
             "default_mra": ""
         },
